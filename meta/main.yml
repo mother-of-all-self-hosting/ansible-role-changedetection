@@ -1,0 +1,19 @@
+galaxy_info:
+  author: Niels Bouma
+  role_name: changedetection
+  description: Ansible role to install an Changedetection.io instance
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: ArchLinux
+      versions:
+        - all
+    - name: EL
+      versions:
+        - "7"
+  license: Apache License 2.0
+  min_ansible_version: '2.1'

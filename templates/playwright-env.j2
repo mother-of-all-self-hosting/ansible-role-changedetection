@@ -1,0 +1,19 @@
+SCREEN_WIDTH=1920
+SCREEN_HEIGHT=1024
+SCREEN_DEPTH=16
+PREBOOT_CHROME=true
+CONNECTION_TIMEOUT={{ changedetection_playwright_driver_connection_timeout }}
+MAX_CONCURRENT_SESSIONS={{ changedetection_playwright_driver_concurrent_sessions }}
+CHROME_REFRESH_TIME={{ changedetection_playwright_driver_refresh_time }}
+
+{% if changedetection_playwright_driver_block_ads %}
+DEFAULT_BLOCK_ADS=true
+{% endif %}
+{% if changedetection_playwright_driver_stealth %}
+DEFAULT_STEALTH=true
+{% endif %}
+{% if changedetection_playwright_driver_ignore_https_errors %}
+DEFAULT_IGNORE_HTTPS_ERRORS=true
+{% endif %}
+
+{{ changedetection_playwright_driver_environment_variables_additional_variables }}

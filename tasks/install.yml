@@ -1,0 +1,63 @@
+---
+
+- name: Ensure Changedetection.io paths exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0750"
+    owner: "{{ changedetection_uid }}"
+    group: "{{ changedetection_gid }}"
+  with_items:
+    - "{{ changedetection_base_path }}"
+    - "{{ changedetection_data_dir_path }}"
+
+- name: Ensure Changedetection.io support files created
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/{{ item }}.j2"
+    dest: "{{ changedetection_base_path }}/{{ item }}"
+    owner: "{{ changedetection_uid }}"
+    group: "{{ changedetection_gid }}"
+    mode: 0640
+  with_items:
+    - env
+    - playwright-env
+    - labels
+
+- name: Ensure Changedetection.io container image is pulled
+  community.docker.docker_image:
+    name: "{{ changedetection_container_image }}"
+    source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
+    force_source: "{{ changedetection_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
+    force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else changedetection_container_image_force_pull }}"
+  register: result
+  retries: "{{ devture_playbook_help_container_retries_count }}"
+  delay: "{{ devture_playbook_help_container_retries_delay }}"
+  until: result is not failed
+
+- name: Ensure Changedetection.io playwright-driver container image is pulled
+  community.docker.docker_image:
+    name: "{{ changedetection_playwright_driver_container_image }}"
+    source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
+    force_source: "{{ changedetection_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
+    force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else changedetection_container_image_force_pull }}"
+  register: result
+  retries: "{{ devture_playbook_help_container_retries_count }}"
+  delay: "{{ devture_playbook_help_container_retries_delay }}"
+  until: result is not failed
+
+- name: Ensure Changedetection container network is created
+  community.general.docker_network:
+    name: "{{ changedetection_container_network }}"
+    driver: bridge
+
+- name: Ensure Changedetection.io systemd service installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/changedetection.service.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}.service"
+    mode: 0640
+
+- name: Ensure Changedetection.io playwright-driver systemd service installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/systemd/changedetection-playwright-driver.service.j2"
+    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
+    mode: 0640

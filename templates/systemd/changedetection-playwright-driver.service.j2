@@ -1,0 +1,40 @@
+[Unit]
+Description=Changedetection.io Playwright driver ({{ changedetection_playwright_driver_identifier }})
+{% for service in changedetection_playwright_driver_systemd_required_services_list %}
+Requires={{ service }}
+After={{ service }}
+{% endfor %}
+DefaultDependencies=no
+
+[Service]
+Type=simple
+Environment="HOME={{ devture_systemd_docker_base_systemd_unit_home_path }}"
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} kill {{ changedetection_playwright_driver_identifier }} 2>/dev/null'
+ExecStartPre=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ changedetecchangedetection_playwright_driver_identifiertion_identifier }} 2>/dev/null'
+
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
+			--rm \
+			--name={{ changedetection_playwright_driver_identifier }} \
+			--log-driver=none \
+			--user={{ changedetection_uid }}:{{ changedetection_gid }} \
+			--cap-drop=ALL \
+			--read-only \
+			--network={{ changedetection_container_network }} \
+			--env-file={{ changedetection_base_path }}/playwright-env \
+			--tmpfs=/tmp:rw,noexec,nosuid,size=128m \
+			{{ changedetection_playwright_driver_container_image }}
+
+{% for network in changedetection_playwright_driver_container_additional_networks %}
+ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ changedetection_playwright_driver_identifier }}
+{% endfor %}
+
+ExecStart={{ devture_systemd_docker_base_host_command_docker }} start --attach {{ changedetection_playwright_driver_identifier }}
+
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} kill {{ changedetection_playwright_driver_identifier }} 2>/dev/null'
+ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ changedetection_playwright_driver_identifier }} 2>/dev/null'
+Restart=always
+RestartSec=30
+SyslogIdentifier={{ changedetection_playwright_driver_identifier }}
+
+[Install]
+WantedBy=multi-user.target
