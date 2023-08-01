@@ -1,6 +1,6 @@
 ---
 
-- name: Check existence of Changedetection.io systemd service
+- name: Check existence of Changedetection.io playwright-driver systemd service
   ansible.builtin.stat:
     path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
   register: changedetection_playwright_driver_service_stat
