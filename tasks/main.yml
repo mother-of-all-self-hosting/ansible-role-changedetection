@@ -13,7 +13,7 @@
     - install-changedetection    
 
 - block:
-    - when: not changedetection_playwright_driver_enabled || not changedetection_enabled | bool
+    - when: (not changedetection_playwright_driver_enabled | bool) or (not changedetection_enabled | bool)
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall_playwright_driver.yml"
   tags:
     - setup-all
