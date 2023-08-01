@@ -28,7 +28,7 @@ changedetection_container_image_registry_prefix: ghcr.io/
 changedetection_container_image_tag: "{{ changedetection_version }}"
 changedetection_container_image_force_pull: "{{ changedetection_container_image.endswith(':latest') }}"
 
-changedetection_playwright_driver_container_image: "{{ changedetection_container_image_registry_prefix }}browserless/chrome:{{ changedetection_container_image_tag }}"
+changedetection_playwright_driver_container_image: "{{ changedetection_playwright_driver_container_image_registry_prefix }}browserless/chrome:{{ changedetection_playwright_driver_container_image_tag }}"
 changedetection_playwright_driver_container_image_registry_prefix: docker.io/
 changedetection_playwright_driver_container_image_tag: "{{ changedetection_playwright_driver_version }}"
 changedetection_playwright_driver_container_image_force_pull: "{{ changedetection_playwright_driver_container_image.endswith(':latest') }}"
