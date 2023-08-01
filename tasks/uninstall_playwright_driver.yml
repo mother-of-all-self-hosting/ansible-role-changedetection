@@ -1,0 +1,21 @@
+---
+
+- name: Check existence of Changedetection.io systemd service
+  ansible.builtin.stat:
+    path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
+  register: changedetection_playwright_driver_service_stat
+
+- when: changedetection_playwright_driver_service_stat.stat.exists | bool
+  block:
+   
+    - name: Ensure Changedetection.io playwright-driver systemd service is stopped
+      ansible.builtin.service:
+        name: "{{ changedetection_playwright_driver_identifier }}"
+        state: stopped
+        enabled: false
+        daemon_reload: true
+
+    - name: Ensure Changedetection.io playwright-driver systemd service does not exists
+      ansible.builtin.file:
+        path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
+        state: absent

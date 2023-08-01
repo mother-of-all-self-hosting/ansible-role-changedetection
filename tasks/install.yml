@@ -20,8 +20,18 @@
     mode: 0640
   with_items:
     - env
-    - playwright-env
     - labels
+
+- name: Ensure Changedetection.io playwright-driver support files created
+  when: changedetection_playwright_driver_enabled | bool
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/{{ item }}.j2"
+    dest: "{{ changedetection_base_path }}/{{ item }}"
+    owner: "{{ changedetection_uid }}"
+    group: "{{ changedetection_gid }}"
+    mode: 0640
+  with_items:
+    - playwright-env
 
 - name: Ensure Changedetection.io container image is pulled
   community.docker.docker_image:
@@ -35,6 +45,7 @@
   until: result is not failed
 
 - name: Ensure Changedetection.io playwright-driver container image is pulled
+  when: changedetection_playwright_driver_enabled | bool
   community.docker.docker_image:
     name: "{{ changedetection_playwright_driver_container_image }}"
     source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
@@ -57,6 +68,7 @@
     mode: 0640
 
 - name: Ensure Changedetection.io playwright-driver systemd service installed
+  when: changedetection_playwright_driver_enabled | bool
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/changedetection-playwright-driver.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"

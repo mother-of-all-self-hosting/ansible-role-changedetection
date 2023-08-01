@@ -3,6 +3,7 @@
 # Project source code URL: https://github.com/dgtlmoon/changedetection.io
 
 changedetection_enabled: true
+changedetection_playwright_driver_enabled: false
 
 changedetection_identifier: changedetection
 changedetection_playwright_driver_identifier: "{{ changedetection_identifier}}-playwright-driver"
@@ -11,7 +12,7 @@ changedetection_uid: ''
 changedetection_gid: ''
 
 changedetection_version: '0.44'
-changedetection_playwright_driver_version: 1-puppeteer-1.20.0
+changedetection_playwright_driver_version: latest
 
 # The hostname at which changedetection is served.
 changedetection_hostname: ''
@@ -107,7 +108,7 @@ changedetection_container_additional_volumes: []
 # A list of extra arguments to pass to the container
 changedetection_container_extra_arguments: []
 
-changedetection_playwright_driver_url: "=ws://{{ changedetection_playwright_driver_identifier }}:3000/?stealth=1&--disable-web-security=true"
+changedetection_playwright_driver_url: "{{ 'ws://{{ changedetection_playwright_driver_identifier }}:3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else ''}}"
 
 changedetection_http_proxy: ''
 changedetection_https_proxy: ''
@@ -116,7 +117,7 @@ changedetection_no_proxy: ''
 changedetection_base_url: "https://{{ changedetection_hostname + changedetection_path_prefix | trim('/') }}"
 changedetection_proxy_headers: true
 
-changedetection_hide_referer: true
+changedetection_hide_referer: false
 
 changedetection_playwright_driver_connection_timeout: 300000
 changedetection_playwright_driver_concurrent_sessions: 10
@@ -134,7 +135,9 @@ changedetection_playwright_driver_environment_variables_additional_variables: ''
 changedetection_systemd_required_services_list: "{{ changedetection_systemd_required_services_list_default + changedetection_systemd_required_services_list_auto + changedetection_systemd_required_services_list_custom }}"
 changedetection_systemd_required_services_list_default: |
   {{
-      ['docker.service', (changedetection_playwright_driver_identifier) + '.service']
+      ['docker.service']
+      +
+      ([changedetection_playwright_driver_identifier + '.service'] if changedetection_playwright_driver_enabled else [])
   }}
 changedetection_systemd_required_services_list_auto: []
 changedetection_systemd_required_services_list_custom: []
