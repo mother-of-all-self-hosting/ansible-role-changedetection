@@ -108,7 +108,7 @@ changedetection_container_additional_volumes: []
 # A list of extra arguments to pass to the container
 changedetection_container_extra_arguments: []
 
-changedetection_playwright_driver_url: "{{ 'ws://{{ changedetection_playwright_driver_identifier }}:3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else ''}}"
+changedetection_playwright_driver_url: "{{ 'ws://' + changedetection_playwright_driver_identifier + ':3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else ''}}"
 
 changedetection_http_proxy: ''
 changedetection_https_proxy: ''
