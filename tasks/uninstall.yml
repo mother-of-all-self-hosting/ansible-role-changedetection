@@ -13,22 +13,10 @@
         state: stopped
         enabled: false
         daemon_reload: true
-    
-    - name: Ensure Changedetection.io playwright-driver systemd service is stopped
-      ansible.builtin.service:
-        name: "{{ changedetection_playwright_driver_identifier }}"
-        state: stopped
-        enabled: false
-        daemon_reload: true
 
     - name: Ensure Changedetection.io systemd service does not exists
       ansible.builtin.file:
         path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}.service"
-        state: absent
-
-    - name: Ensure Changedetection.io playwright-driver systemd service does not exists
-      ansible.builtin.file:
-        path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
         state: absent
 
     - name: Ensure Changedetection.io path doesn't exist
