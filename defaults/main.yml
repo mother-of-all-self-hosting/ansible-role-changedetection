@@ -11,7 +11,7 @@ changedetection_playwright_driver_identifier: "{{ changedetection_identifier}}-p
 changedetection_uid: ''
 changedetection_gid: ''
 
-changedetection_version: '0.45.12'
+changedetection_version: '0.45.14'
 changedetection_playwright_driver_version: latest
 
 # The hostname at which changedetection is served.
