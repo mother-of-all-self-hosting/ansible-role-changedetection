@@ -5,6 +5,8 @@ PREBOOT_CHROME=true
 CONNECTION_TIMEOUT={{ changedetection_playwright_driver_connection_timeout }}
 MAX_CONCURRENT_SESSIONS={{ changedetection_playwright_driver_concurrent_sessions }}
 CHROME_REFRESH_TIME={{ changedetection_playwright_driver_refresh_time }}
+XDG_CONFIG_HOME=/tmp/.chromium
+XDG_CACHE_HOME=/tmp/.chromium
 
 {% if changedetection_playwright_driver_block_ads %}
 DEFAULT_BLOCK_ADS=true
