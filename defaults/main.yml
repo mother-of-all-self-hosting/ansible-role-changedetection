@@ -15,7 +15,7 @@ changedetection_playwright_driver_identifier: "{{ changedetection_identifier}}-p
 changedetection_uid: ''
 changedetection_gid: ''
 
-# renovate: datasource=docker depName=ghcr.io/dgtlmoon/changedetection
+# renovate: datasource=docker depName=ghcr.io/dgtlmoon/changedetection.io
 changedetection_version: 0.48.04
 
 changedetection_playwright_driver_version: latest
