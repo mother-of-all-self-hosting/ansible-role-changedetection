@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 Niels Bouma
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Changedetection.io Ansible role
 This is an [Ansible](https://www.ansible.com/) role which installs [Changedetection.io](https://github.com/dgtlmoon/changedetection.io), for website change detection, restock monitoring and notifications, to run as a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
