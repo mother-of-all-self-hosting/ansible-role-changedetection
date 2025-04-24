@@ -1,3 +1,9 @@
+{#
+SPDX-FileCopyrightText: 2023 Niels Bouma
+
+SPDX-License-Identifier: Apache-2.0
+#}
+
 [Unit]
 Description=Changedetection.io ({{ changedetection_identifier }})
 {% for service in changedetection_systemd_required_services_list %}

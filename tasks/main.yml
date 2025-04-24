@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Niels Bouma
+#
+# SPDX-License-Identifier: Apache-2.0
+
 ---
 
 - block:
@@ -10,7 +14,7 @@
     - setup-all
     - setup-changedetection
     - install-all
-    - install-changedetection    
+    - install-changedetection
 
 - block:
     - when: (not changedetection_playwright_driver_enabled | bool) or (not changedetection_enabled | bool)

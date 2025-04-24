@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2023 Niels Bouma
+#
+# SPDX-License-Identifier: Apache-2.0
+
 ---
 
 - name: Check existence of Changedetection.io playwright-driver systemd service
@@ -7,7 +11,7 @@
 
 - when: changedetection_playwright_driver_service_stat.stat.exists | bool
   block:
-   
+
     - name: Ensure Changedetection.io playwright-driver systemd service is stopped
       ansible.builtin.service:
         name: "{{ changedetection_playwright_driver_identifier }}"
