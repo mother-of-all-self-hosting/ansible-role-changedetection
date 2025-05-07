@@ -63,10 +63,12 @@ changedetection_playwright_driver_container_additional_networks: "{{ changedetec
 changedetection_playwright_driver_container_additional_networks_auto: []
 changedetection_playwright_driver_container_additional_networks_custom: []
 
+# The port number in the container
+changedetection_container_http_port: 5000
+
 # Specifies how the container publishes its HTTP port
 #
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:5000"), just a port number or an empty string to not expose.
-changedetection_container_http_port: 5000
 changedetection_container_http_bind_port: ''
 
 # changedetection_container_labels_traefik_enabled controls whether labels to assist a Traefik reverse-proxy will be attached to the container.
