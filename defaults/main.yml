@@ -1,4 +1,9 @@
 # SPDX-FileCopyrightText: 2023 Niels Bouma
+# SPDX-FileCopyrightText: 2023 - 2024 Nikita Chernyi
+# SPDX-FileCopyrightText: 2023 - 2025 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2024 Sergio Durigan Junior
+# SPDX-FileCopyrightText: 2025 MASH project contributors
+# SPDX-FileCopyrightText: 2025 Suguru Hirahara
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -31,13 +36,17 @@ changedetection_base_path: "/{{ changedetection_identifier }}"
 changedetection_data_dir_path: "{{ changedetection_base_path }}/data"
 
 changedetection_container_image: "{{ changedetection_container_image_registry_prefix }}dgtlmoon/changedetection.io:{{ changedetection_container_image_tag }}"
-changedetection_container_image_registry_prefix: ghcr.io/
 changedetection_container_image_tag: "{{ changedetection_version }}"
+changedetection_container_image_registry_prefix: "{{ changedetection_container_image_registry_prefix_upstream }}"
+changedetection_container_image_registry_prefix_upstream: "{{ changedetection_container_image_registry_prefix_upstream_default }}"
+changedetection_container_image_registry_prefix_upstream_default: ghcr.io/
 changedetection_container_image_force_pull: "{{ changedetection_container_image.endswith(':latest') }}"
 
 changedetection_playwright_driver_container_image: "{{ changedetection_playwright_driver_container_image_registry_prefix }}browserless/chrome:{{ changedetection_playwright_driver_container_image_tag }}"
-changedetection_playwright_driver_container_image_registry_prefix: docker.io/
 changedetection_playwright_driver_container_image_tag: "{{ changedetection_playwright_driver_version }}"
+changedetection_playwright_driver_container_image_registry_prefix: "{{ changedetection_playwright_driver_container_image_registry_prefix_upstream }}"
+changedetection_playwright_driver_container_image_registry_prefix_upstream: "{{ changedetection_playwright_driver_container_image_registry_prefix_upstream_default }}"
+changedetection_playwright_driver_container_image_registry_prefix_upstream_default: docker.io/
 changedetection_playwright_driver_container_image_force_pull: "{{ changedetection_playwright_driver_container_image.endswith(':latest') }}"
 
 # The base container network. It will be auto-created by this role if it doesn't exist already.
