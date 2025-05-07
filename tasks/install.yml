@@ -62,7 +62,7 @@
   delay: "{{ devture_playbook_help_container_retries_delay }}"
   until: result is not failed
 
-- name: Ensure Changedetection container network is created
+- name: Ensure Changedetection.io container network is created
   community.general.docker_network:
     enable_ipv6: "{{ devture_systemd_docker_base_ipv6_enabled }}"
     name: "{{ changedetection_container_network }}"
