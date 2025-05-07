@@ -163,6 +163,6 @@ changedetection_systemd_required_services_list_custom: []
 
 # List of systemd services that changedetection.service depends on
 changedetection_playwright_driver_systemd_required_services_list: "{{ changedetection_playwright_driver_systemd_required_services_list_default + changedetection_playwright_driver_systemd_required_services_list_auto + changedetection_playwright_driver_systemd_required_services_list_custom }}"
-changedetection_playwright_driver_systemd_required_services_list_default: ['docker.service']
+changedetection_playwright_driver_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"
 changedetection_playwright_driver_systemd_required_services_list_auto: []
 changedetection_playwright_driver_systemd_required_services_list_custom: []
