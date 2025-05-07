@@ -11,7 +11,6 @@
 
 - when: changedetection_playwright_driver_service_stat.stat.exists | bool
   block:
-
     - name: Ensure Changedetection.io playwright-driver systemd service is stopped
       ansible.builtin.service:
         name: "{{ changedetection_playwright_driver_identifier }}"
