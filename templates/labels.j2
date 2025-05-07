@@ -1,15 +1,30 @@
 {#
 SPDX-FileCopyrightText: 2023 Niels Bouma
+SPDX-FileCopyrightText: 2023 Slavi Pantaleev
+SPDX-FileCopyrightText: 2025 Suguru Hirahara
 
 SPDX-License-Identifier: Apache-2.0
 #}
 
 {% if changedetection_container_labels_traefik_enabled %}
+traefik.enable=true
+
 {% if changedetection_container_labels_traefik_docker_network %}
 traefik.docker.network={{ changedetection_container_labels_traefik_docker_network }}
 {% endif %}
 
 {% set middlewares = [] %}
+
+{% if changedetection_container_labels_traefik_path_prefix != '/' %}
+traefik.http.middlewares.{{ changedetection_identifier }}-slashless-redirect.redirectregex.regex=({{ changedetection_container_labels_traefik_path_prefix | quote }})$
+traefik.http.middlewares.{{ changedetection_identifier }}-slashless-redirect.redirectregex.replacement=${1}/
+{% set middlewares = middlewares + [changedetection_identifier + '-slashless-redirect'] %}
+{% endif %}
+
+{% if changedetection_container_labels_traefik_path_prefix != '/' %}
+traefik.http.middlewares.{{ changedetection_identifier }}-strip-prefix.stripprefix.prefixes={{ changedetection_container_labels_traefik_path_prefix }}
+{% set middlewares = middlewares + [changedetection_identifier + '-strip-prefix'] %}
+{% endif %}
 
 {% if changedetection_container_labels_traefik_additional_request_headers.keys() | length > 0 %}
 {% for name, value in changedetection_container_labels_traefik_additional_request_headers.items() %}
@@ -25,21 +40,21 @@ traefik.http.middlewares.{{ changedetection_identifier }}-add-response-headers.h
 {% set middlewares = middlewares + [changedetection_identifier + '-add-response-headers'] %}
 {% endif %}
 
-traefik.enable=true
-{% endif %}
 traefik.http.routers.{{ changedetection_identifier }}.rule={{ changedetection_container_labels_traefik_rule }}
 {% if changedetection_container_labels_traefik_priority | int > 0 %}
 traefik.http.routers.{{ changedetection_identifier }}.priority={{ changedetection_container_labels_traefik_priority }}
 {% endif %}
+traefik.http.routers.{{ changedetection_identifier }}.service={{ changedetection_identifier }}
 {% if middlewares | length > 0 %}
 traefik.http.routers.{{ changedetection_identifier }}.middlewares={{ middlewares | join(',') }}
 {% endif %}
-traefik.http.routers.{{ changedetection_identifier }}.service={{ changedetection_identifier }}
 traefik.http.routers.{{ changedetection_identifier }}.entrypoints={{ changedetection_container_labels_traefik_entrypoints }}
 traefik.http.routers.{{ changedetection_identifier }}.tls={{ changedetection_container_labels_traefik_tls | to_json }}
 {% if changedetection_container_labels_traefik_tls %}
 traefik.http.routers.{{ changedetection_identifier }}.tls.certResolver={{ changedetection_container_labels_traefik_tls_certResolver }}
 {% endif %}
+
 traefik.http.services.{{ changedetection_identifier }}.loadbalancer.server.port={{ changedetection_container_http_port }}
+{% endif %}
 
 {{ changedetection_container_labels_additional_labels }}

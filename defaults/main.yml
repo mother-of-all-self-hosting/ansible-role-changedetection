@@ -134,7 +134,7 @@ changedetection_http_proxy: ''
 changedetection_https_proxy: ''
 changedetection_no_proxy: ''
 
-changedetection_base_url: "{{ changedetection_scheme }}://{{ changedetection_hostname + changedetection_path_prefix | trim('/') }}"
+changedetection_base_url: "{{ changedetection_scheme }}://{{ changedetection_hostname }}{{ changedetection_path_prefix }}"
 changedetection_proxy_headers: true
 
 changedetection_hide_referer: false
