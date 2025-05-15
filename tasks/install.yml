@@ -17,7 +17,7 @@
     - "{{ changedetection_base_path }}"
     - "{{ changedetection_data_dir_path }}"
 
-- name: Ensure Changedetection.io support files created
+- name: Ensure Changedetection.io support files installed
   ansible.builtin.template:
     src: "{{ role_path }}/templates/{{ item }}.j2"
     dest: "{{ changedetection_base_path }}/{{ item }}"
@@ -28,7 +28,7 @@
     - env
     - labels
 
-- name: Ensure Changedetection.io playwright-driver support files created
+- name: Ensure Changedetection.io playwright-driver support files installed
   when: changedetection_playwright_driver_enabled | bool
   ansible.builtin.template:
     src: "{{ role_path }}/templates/{{ item }}.j2"
