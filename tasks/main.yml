@@ -4,11 +4,14 @@
 
 ---
 
-- block:
-    - when: changedetection_enabled | bool
+- name: Perform Changedetection.io installation tasks
+  block:
+    - name: Validate Changedetection.io configuration
+      when: changedetection_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
 
-    - when: changedetection_enabled | bool
+    - name: Install Changedetection.io
+      when: changedetection_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
   tags:
     - setup-all
@@ -16,15 +19,18 @@
     - install-all
     - install-changedetection
 
-- block:
+- name: Perform Changedetection.io playwright-driver uninstallation tasks
+  block:
     - when: (not changedetection_playwright_driver_enabled | bool) or (not changedetection_enabled | bool)
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall_playwright_driver.yml"
   tags:
     - setup-all
     - setup-changedetection
 
-- block:
-    - when: not changedetection_enabled | bool
+- name: Perform Changedetection.io uninstallation tasks
+  block:
+    - name: Uninstall Changedetection.io
+      when: not changedetection_enabled | bool
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"
   tags:
     - setup-all
