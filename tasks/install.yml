@@ -73,11 +73,11 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/changedetection.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}.service"
-    mode: 0640
+    mode: 0644
 
 - name: Ensure Changedetection.io playwright-driver systemd service is present
   when: changedetection_playwright_driver_enabled | bool
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/changedetection-playwright-driver.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
-    mode: 0640
+    mode: 0644
