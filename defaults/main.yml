@@ -100,7 +100,7 @@ changedetection_container_labels_traefik_rule: "Host(`{{ changedetection_contain
 changedetection_container_labels_traefik_priority: 0
 changedetection_container_labels_traefik_entrypoints: web-secure
 changedetection_container_labels_traefik_tls: "{{ changedetection_container_labels_traefik_entrypoints != 'web' }}"
-changedetection_container_labels_traefik_tls_certResolver: default
+changedetection_container_labels_traefik_tls_certResolver: default  # noqa var-naming
 
 # Controls which additional headers to attach to all HTTP requests.
 # To add your own custom request headers, use `changedetection_container_labels_traefik_additional_response_headers_custom`
@@ -181,9 +181,9 @@ changedetection_floc_optout_enabled: true
 # See: `changedetection_http_header_strict_transport_security`
 changedetection_hsts_preload_enabled: false
 
-changedetection_playwright_driver_identifier: "{{ changedetection_identifier}}-playwright-driver"
+changedetection_playwright_driver_identifier: "{{ changedetection_identifier }}-playwright-driver"
 
-changedetection_playwright_driver_url: "{{ 'ws://' + changedetection_playwright_driver_identifier + ':3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else ''}}"
+changedetection_playwright_driver_url: "{{ 'ws://' + changedetection_playwright_driver_identifier + ':3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else '' }}"
 
 changedetection_http_proxy: ''
 changedetection_https_proxy: ''
@@ -199,7 +199,7 @@ changedetection_playwright_driver_concurrent_sessions: 10
 changedetection_playwright_driver_refresh_time: 600000
 changedetection_playwright_driver_block_ads: true
 changedetection_playwright_driver_stealth: true
-#Ignore HTTPS errors, like for self-signed certs
+# Ignore HTTPS errors, like for self-signed certs
 changedetection_playwright_driver_ignore_https_errors: false
 
 # List of systemd services that changedetection.service depends on

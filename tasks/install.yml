@@ -5,12 +5,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-
 - name: Ensure Changedetection.io paths exist
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0750
+    mode: "0750"
     owner: "{{ changedetection_uid }}"
     group: "{{ changedetection_gid }}"
   with_items:
@@ -23,7 +22,7 @@
     dest: "{{ changedetection_base_path }}/{{ item }}"
     owner: "{{ changedetection_uid }}"
     group: "{{ changedetection_gid }}"
-    mode: 0640
+    mode: "0640"
   with_items:
     - env
     - labels
@@ -35,7 +34,7 @@
     dest: "{{ changedetection_base_path }}/{{ item }}"
     owner: "{{ changedetection_uid }}"
     group: "{{ changedetection_gid }}"
-    mode: 0640
+    mode: "0640"
   with_items:
     - playwright-env
 
@@ -73,11 +72,11 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/changedetection.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}.service"
-    mode: 0644
+    mode: "0644"
 
 - name: Ensure Changedetection.io playwright-driver systemd service is present
   when: changedetection_playwright_driver_enabled | bool
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/changedetection-playwright-driver.service.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
-    mode: 0644
+    mode: "0644"
