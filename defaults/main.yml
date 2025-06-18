@@ -41,6 +41,12 @@ changedetection_container_image_registry_prefix_upstream: "{{ changedetection_co
 changedetection_container_image_registry_prefix_upstream_default: ghcr.io/
 changedetection_container_image_force_pull: "{{ changedetection_container_image.endswith(':latest') }}"
 
+changedetection_container_image_self_build: false
+changedetection_container_image_self_build_name: "dgtlmoon/changedetection:{{ changedetection_container_image_self_build_repo_version }}"
+changedetection_container_image_self_build_repo: "https://github.com/dgtlmoon/changedetection.io.git"
+changedetection_container_image_self_build_repo_version: "{{ changedetection_version if changedetection_version != 'latest' else 'main' }}"
+changedetection_container_image_self_build_src_files_path: "{{ changedetection_base_path }}/docker-src"
+
 changedetection_playwright_driver_container_image: "{{ changedetection_playwright_driver_container_image_registry_prefix }}browserless/chrome:{{ changedetection_playwright_driver_container_image_tag }}"
 changedetection_playwright_driver_container_image_tag: "{{ changedetection_playwright_driver_version }}"
 changedetection_playwright_driver_container_image_registry_prefix: "{{ changedetection_playwright_driver_container_image_registry_prefix_upstream }}"
