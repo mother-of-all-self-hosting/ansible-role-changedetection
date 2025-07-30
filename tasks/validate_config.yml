@@ -31,5 +31,5 @@
     - name: Fail if changedetection_container_labels_traefik_path_prefix ends with a slash
       ansible.builtin.fail:
         msg: >-
-          changedetection_container_labels_traefik_path_prefix (`{{ changedetection_container_labels_traefik_path_prefix }}`) must either be `/` or not end with a slash (e.g. `/anonaddy`).
+          changedetection_container_labels_traefik_path_prefix (`{{ changedetection_container_labels_traefik_path_prefix }}`) must either be `/` or not end with a slash (e.g. `/changedetection`).
       when: "changedetection_container_labels_traefik_path_prefix != '/' and changedetection_container_labels_traefik_path_prefix[-1] == '/'"
