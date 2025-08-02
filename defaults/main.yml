@@ -25,12 +25,12 @@ changedetection_playwright_driver_version: latest
 changedetection_uid: ''
 changedetection_gid: ''
 
-# The hostname at which changedetection is served.
+# The hostname at which Changedetection.io is served.
 changedetection_hostname: ''
 
 changedetection_scheme: https
 
-# The path at which changedetection is served.
+# The path at which Changedetection.io is served.
 # This value must either be `/` or not end with a slash (e.g. `/changedetection`).
 changedetection_path_prefix: /
 
