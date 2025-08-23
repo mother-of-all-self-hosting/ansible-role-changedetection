@@ -1,5 +1,6 @@
 {#
 SPDX-FileCopyrightText: 2023 Niels Bouma
+SPDX-FileCopyrightText: 2025 Suguru Hirahara
 
 SPDX-License-Identifier: Apache-2.0
 #}
@@ -9,6 +10,9 @@ Description=Changedetection.io ({{ changedetection_identifier }})
 {% for service in changedetection_systemd_required_services_list %}
 Requires={{ service }}
 After={{ service }}
+{% endfor %}
+{% for service in changedetection_systemd_wanted_services_list %}
+Wants={{ service }}
 {% endfor %}
 DefaultDependencies=no
 
