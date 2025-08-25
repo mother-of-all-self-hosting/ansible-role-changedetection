@@ -14,7 +14,7 @@
     group: "{{ changedetection_gid }}"
   with_items:
     - "{{ changedetection_base_path }}"
-    - "{{ changedetection_data_dir_path }}"
+    - "{{ changedetection_data_path }}"
 
 - name: Ensure Changedetection.io support files installed
   ansible.builtin.template:
