@@ -18,7 +18,7 @@ changedetection_base_path: "/{{ changedetection_identifier }}"
 changedetection_data_path: "{{ changedetection_base_path }}/data"
 
 # renovate: datasource=docker depName=ghcr.io/dgtlmoon/changedetection.io
-changedetection_version: 0.50.24
+changedetection_version: 0.50.26
 
 changedetection_playwright_driver_version: latest
 
