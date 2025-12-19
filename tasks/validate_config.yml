@@ -20,9 +20,11 @@
       You need to define a required configuration setting (`{{ item }}`).
   when: "lookup('vars', item, default='') | string | length == 0"
   with_items:
-    - changedetection_hostname
     - changedetection_uid
     - changedetection_gid
+    - changedetection_hostname
+    - changedetection_path_prefix
+    - changedetection_container_network
 
 - name: Run if Traefik is enabled
   when: changedetection_container_labels_traefik_enabled | bool
