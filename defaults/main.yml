@@ -22,11 +22,11 @@ changedetection_version: 0.51.4
 
 changedetection_playwright_driver_version: latest
 
-changedetection_uid: ''
-changedetection_gid: ''
+changedetection_uid: ""
+changedetection_gid: ""
 
 # The hostname at which Changedetection.io is served.
-changedetection_hostname: ''
+changedetection_hostname: ""
 
 changedetection_scheme: https
 
@@ -57,7 +57,7 @@ changedetection_playwright_driver_container_image_force_pull: "{{ changedetectio
 # Specifies how the container publishes its HTTP port
 #
 # Takes an "<ip>:<port>" value (e.g. "127.0.0.1:5000"), just a port number or an empty string to not expose.
-changedetection_container_http_bind_port: ''
+changedetection_container_http_bind_port: ""
 
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 changedetection_container_network: "{{ changedetection_identifier }}"
@@ -188,9 +188,9 @@ changedetection_playwright_driver_identifier: "{{ changedetection_identifier }}-
 
 changedetection_playwright_driver_url: "{{ 'ws://' + changedetection_playwright_driver_identifier + ':3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else '' }}"
 
-changedetection_http_proxy: ''
-changedetection_https_proxy: ''
-changedetection_no_proxy: ''
+changedetection_http_proxy: ""
+changedetection_https_proxy: ""
+changedetection_no_proxy: ""
 
 changedetection_base_url: "{{ changedetection_scheme }}://{{ changedetection_hostname }}{{ changedetection_path_prefix }}"
 changedetection_proxy_headers: true
@@ -239,5 +239,5 @@ changedetection_playwright_driver_systemd_wanted_services_list_custom: []
 changedetection_playwright_driver_environment_variables_tz: UTC
 
 # Additional environment variables.
-changedetection_environment_variables_additional_variables: ''
-changedetection_playwright_driver_environment_variables_additional_variables: ''
+changedetection_environment_variables_additional_variables: ""
+changedetection_playwright_driver_environment_variables_additional_variables: ""
