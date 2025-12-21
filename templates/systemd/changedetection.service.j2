@@ -37,6 +37,9 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --label-file={{ changedetection_base_path }}/labels \
       --mount type=bind,src={{ changedetection_data_path }},dst=/datastore \
       --tmpfs=/tmp:rw,noexec,nosuid,size=128m \
+      {% for arg in changedetection_container_extra_arguments %}
+      {{ arg }} \
+      {% endfor %}
       {{ changedetection_container_image_self_build_name if changedetection_container_image_self_build else changedetection_container_image }}
 
 {% for network in changedetection_container_additional_networks %}
