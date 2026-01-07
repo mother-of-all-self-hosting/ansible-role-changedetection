@@ -126,11 +126,11 @@ changedetection_container_labels_traefik_additional_response_headers_custom: {}
 #
 # Example:
 # changedetection_container_labels_additional_labels_custom: |
-#   my.label=1
-#   another.label="here"
-changedetection_container_labels_additional_labels: "{{ changedetection_container_labels_additional_labels_auto | combine(changedetection_container_labels_additional_labels_custom) }}"
-changedetection_container_labels_additional_labels_auto: {}
-changedetection_container_labels_additional_labels_custom: {}
+#   - my.label=1
+#   - another.label="here"
+changedetection_container_labels_additional_labels: "{{ changedetection_container_labels_additional_labels_auto + changedetection_container_labels_additional_labels_custom }}"
+changedetection_container_labels_additional_labels_auto: []
+changedetection_container_labels_additional_labels_custom: []
 
 # A list of extra arguments to pass to the container (`docker create` command)
 changedetection_container_extra_arguments: "{{ changedetection_container_extra_arguments_auto + changedetection_container_extra_arguments_custom }}"

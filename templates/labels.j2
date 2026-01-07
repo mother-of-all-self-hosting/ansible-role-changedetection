@@ -57,4 +57,6 @@ traefik.http.routers.{{ changedetection_identifier }}.tls.certResolver={{ change
 traefik.http.services.{{ changedetection_identifier }}.loadbalancer.server.port={{ changedetection_container_http_port }}
 {% endif %}
 
-{{ changedetection_container_labels_additional_labels }}
+{% for arg in changedetection_container_labels_additional_labels %}
+{{ arg }}
+{% endfor %}
