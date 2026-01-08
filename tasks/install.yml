@@ -20,9 +20,9 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/{{ item }}.j2"
     dest: "{{ changedetection_base_path }}/{{ item }}"
+    mode: "0640"
     owner: "{{ changedetection_uid }}"
     group: "{{ changedetection_gid }}"
-    mode: "0640"
   with_items:
     - env
     - labels
@@ -32,9 +32,9 @@
   ansible.builtin.template:
     src: "{{ role_path }}/templates/{{ item }}.j2"
     dest: "{{ changedetection_base_path }}/{{ item }}"
+    mode: "0640"
     owner: "{{ changedetection_uid }}"
     group: "{{ changedetection_gid }}"
-    mode: "0640"
   with_items:
     - playwright-env
 
