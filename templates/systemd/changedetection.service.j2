@@ -30,8 +30,8 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --cap-drop=ALL \
       --read-only \
       --network={{ changedetection_container_network }} \
-      {% if changedetection_container_http_bind_port %}
-      -p {{ changedetection_container_http_bind_port }}:{{ changedetection_container_http_port }} \
+      {% if changedetection_container_http_host_bind_port %}
+      -p {{ changedetection_container_http_host_bind_port }}:{{ changedetection_container_http_port }} \
       {% endif %}
       --env-file={{ changedetection_base_path }}/env \
       --label-file={{ changedetection_base_path }}/labels \
