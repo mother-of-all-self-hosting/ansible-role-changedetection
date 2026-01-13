@@ -25,10 +25,11 @@ changedetection_playwright_driver_version: latest
 changedetection_uid: ""
 changedetection_gid: ""
 
+# The scheme used for serving Changedetection.io.
+changedetection_scheme: https
+
 # The hostname at which Changedetection.io is served.
 changedetection_hostname: ""
-
-changedetection_scheme: https
 
 # The path at which Changedetection.io is served.
 # This value must either be `/` or not end with a slash (e.g. `/changedetection`).
@@ -54,9 +55,9 @@ changedetection_playwright_driver_container_image_registry_prefix_upstream: "{{ 
 changedetection_playwright_driver_container_image_registry_prefix_upstream_default: docker.io/
 changedetection_playwright_driver_container_image_force_pull: "{{ changedetection_playwright_driver_container_image.endswith(':latest') }}"
 
-# Specifies how the container publishes its HTTP port
+# Controls whether the container exposes its HTTP port (tcp/5000 in the container).
 #
-# Takes an "<ip>:<port>" value (e.g. "127.0.0.1:5000"), just a port number or an empty string to not expose.
+# Takes an "<ip>:<port>" or "<port>" value (e.g. "127.0.0.1:2586"), or empty string to not expose.
 changedetection_container_http_host_bind_port: ""
 
 # The base container network. It will be auto-created by this role if it doesn't exist already.
