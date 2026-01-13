@@ -88,7 +88,7 @@ changedetection_container_additional_volumes_custom: []
 # changedetection_container_labels_traefik_enabled controls whether labels to assist a Traefik reverse-proxy will be attached to the container.
 # See `../templates/labels.j2` for details.
 #
-# To inject your own other container labels, see `changedetection_container_labels_additional_labels`.
+# To inject your own other container labels, see `changedetection_container_labels_additional_labels_custom`.
 changedetection_container_labels_traefik_enabled: true
 changedetection_container_labels_traefik_docker_network: "{{ changedetection_container_network }}"
 changedetection_container_labels_traefik_hostname: "{{ changedetection_hostname }}"
