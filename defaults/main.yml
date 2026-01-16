@@ -183,7 +183,7 @@ changedetection_proxy_headers: true
 
 changedetection_hide_referer: false
 
-# List of systemd services that changedetection.service depends on
+# List of systemd services that the Changedetection.io systemd service depends on
 changedetection_systemd_required_services_list: "{{ changedetection_systemd_required_services_list_default + changedetection_systemd_required_services_list_auto + changedetection_systemd_required_services_list_custom }}"
 changedetection_systemd_required_services_list_default: |
   {{
@@ -194,6 +194,7 @@ changedetection_systemd_required_services_list_default: |
 changedetection_systemd_required_services_list_auto: []
 changedetection_systemd_required_services_list_custom: []
 
+# List of systemd services that the Changedetection.io systemd service wants
 changedetection_systemd_wanted_services_list: "{{ changedetection_systemd_wanted_services_list_default + changedetection_systemd_wanted_services_list_auto + changedetection_systemd_wanted_services_list_custom }}"
 changedetection_systemd_wanted_services_list_default: []
 changedetection_systemd_wanted_services_list_auto: []
@@ -202,6 +203,7 @@ changedetection_systemd_wanted_services_list_custom: []
 # Specify the timezone
 changedetection_environment_variables_tz: UTC
 
+# Additional environment variables.
 changedetection_environment_variables_additional_variables: ""
 
 ########################################################################
@@ -223,16 +225,20 @@ changedetection_playwright_driver_container_image_registry_prefix_upstream: "{{ 
 changedetection_playwright_driver_container_image_registry_prefix_upstream_default: docker.io/
 changedetection_playwright_driver_container_image_force_pull: "{{ changedetection_playwright_driver_container_image.endswith(':latest') }}"
 
+# A list of additional container networks that the container would be connected to.
+# The role does not create these networks, so make sure they already exist.
+# Use this to expose this container to another reverse proxy, which runs in a different container network.
 changedetection_playwright_driver_container_additional_networks: "{{ changedetection_playwright_driver_container_additional_networks_auto + changedetection_playwright_driver_container_additional_networks_custom }}"
 changedetection_playwright_driver_container_additional_networks_auto: []
 changedetection_playwright_driver_container_additional_networks_custom: []
 
-# List of systemd services that changedetection.service depends on
+# List of systemd services that the Changedetection.io Playwright driver systemd service depends on
 changedetection_playwright_driver_systemd_required_services_list: "{{ changedetection_playwright_driver_systemd_required_services_list_default + changedetection_playwright_driver_systemd_required_services_list_auto + changedetection_playwright_driver_systemd_required_services_list_custom }}"
 changedetection_playwright_driver_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"
 changedetection_playwright_driver_systemd_required_services_list_auto: []
 changedetection_playwright_driver_systemd_required_services_list_custom: []
 
+# List of systemd services that the Changedetection.io Playwright driver systemd service wants
 changedetection_playwright_driver_systemd_wanted_services_list: "{{ changedetection_playwright_driver_systemd_wanted_services_list_default + changedetection_playwright_driver_systemd_wanted_services_list_auto + changedetection_playwright_driver_systemd_wanted_services_list_custom }}"
 changedetection_playwright_driver_systemd_wanted_services_list_default: []
 changedetection_playwright_driver_systemd_wanted_services_list_auto: []
