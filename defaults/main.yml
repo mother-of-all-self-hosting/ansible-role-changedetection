@@ -133,6 +133,9 @@ changedetection_container_labels_additional_labels: "{{ changedetection_containe
 changedetection_container_labels_additional_labels_auto: []
 changedetection_container_labels_additional_labels_custom: []
 
+# Specify the size of the container's tmpfs volume
+changedetection_container_tmpfs_tmp_size: 128m
+
 # A list of extra arguments to pass to the container (`docker create` command)
 changedetection_container_extra_arguments: "{{ changedetection_container_extra_arguments_auto + changedetection_container_extra_arguments_custom }}"
 changedetection_container_extra_arguments_auto: []

@@ -36,7 +36,7 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --env-file={{ changedetection_base_path }}/env \
       --label-file={{ changedetection_base_path }}/labels \
       --mount type=bind,src={{ changedetection_data_path }},dst=/datastore \
-      --tmpfs=/tmp:rw,noexec,nosuid,size=128m \
+      --tmpfs=/tmp:rw,noexec,nosuid,size={{ changedetection_container_tmpfs_tmp_size }} \
       {% for arg in changedetection_container_extra_arguments %}
       {{ arg }} \
       {% endfor %}
