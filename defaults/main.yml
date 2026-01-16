@@ -235,6 +235,11 @@ changedetection_playwright_driver_container_additional_networks_custom: []
 # Specify the size of the container's tmpfs volume
 changedetection_playwright_driver_container_tmpfs_tmp_size: 512m
 
+# A list of extra arguments to pass to the container (`docker create` command)
+changedetection_playwright_driver_container_extra_arguments: "{{ changedetection_playwright_driver_container_extra_arguments_auto + changedetection_playwright_driver_container_extra_arguments_custom }}"
+changedetection_playwright_driver_container_extra_arguments_auto: []
+changedetection_playwright_driver_container_extra_arguments_custom: []
+
 # List of systemd services that the Changedetection.io Playwright driver systemd service depends on
 changedetection_playwright_driver_systemd_required_services_list: "{{ changedetection_playwright_driver_systemd_required_services_list_default + changedetection_playwright_driver_systemd_required_services_list_auto + changedetection_playwright_driver_systemd_required_services_list_custom }}"
 changedetection_playwright_driver_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"

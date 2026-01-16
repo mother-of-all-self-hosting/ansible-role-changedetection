@@ -34,6 +34,9 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       --network={{ changedetection_container_network }} \
       --env-file={{ changedetection_base_path }}/playwright-env \
       --tmpfs=/tmp:rw,noexec,nosuid,size={{ changedetection_playwright_driver_container_tmpfs_tmp_size }} \
+      {% for arg in changedetection_playwright_driver_container_extra_arguments %}
+      {{ arg }} \
+      {% endfor %}
       {{ changedetection_playwright_driver_container_image }}
 
 {% for network in changedetection_playwright_driver_container_additional_networks %}
