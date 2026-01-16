@@ -174,15 +174,6 @@ changedetection_floc_optout_enabled: true
 # See: `changedetection_http_header_strict_transport_security`
 changedetection_hsts_preload_enabled: false
 
-changedetection_http_proxy: ""
-changedetection_https_proxy: ""
-changedetection_no_proxy: ""
-
-changedetection_base_url: "{{ changedetection_scheme }}://{{ changedetection_hostname }}{{ changedetection_path_prefix }}"
-changedetection_proxy_headers: true
-
-changedetection_hide_referer: false
-
 # List of systemd services that the Changedetection.io systemd service depends on
 changedetection_systemd_required_services_list: "{{ changedetection_systemd_required_services_list_default + changedetection_systemd_required_services_list_auto + changedetection_systemd_required_services_list_custom }}"
 changedetection_systemd_required_services_list_default: |
@@ -199,6 +190,15 @@ changedetection_systemd_wanted_services_list: "{{ changedetection_systemd_wanted
 changedetection_systemd_wanted_services_list_default: []
 changedetection_systemd_wanted_services_list_auto: []
 changedetection_systemd_wanted_services_list_custom: []
+
+changedetection_http_proxy: ""
+changedetection_https_proxy: ""
+changedetection_no_proxy: ""
+
+changedetection_base_url: "{{ changedetection_scheme }}://{{ changedetection_hostname }}{{ changedetection_path_prefix }}"
+changedetection_proxy_headers: true
+
+changedetection_hide_referer: false
 
 # Specify the timezone
 changedetection_environment_variables_tz: UTC
