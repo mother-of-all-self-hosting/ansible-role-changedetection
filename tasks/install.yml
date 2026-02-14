@@ -87,8 +87,8 @@
           .
       environment:
         DOCKER_BUILDKIT: "1"
-      register: result
-      changed_when: "'Successfully built' in result.stdout or ('writing image' in result.stderr and 'CACHED' not in result.stderr)"
+      register: changedetection_container_image_build_result
+      changed_when: "'Successfully built' in changedetection_container_image_build_result.stdout or ('writing image' in changedetection_container_image_build_result.stderr and 'CACHED' not in changedetection_container_image_build_result.stderr)"
 
 - name: Ensure Changedetection.io playwright-driver container image is pulled via community.docker.docker_image
   when: changedetection_playwright_driver_enabled | bool
