@@ -28,18 +28,6 @@
     - labels
   register: changedetection_support_files_result
 
-- name: Ensure Changedetection.io playwright-driver support files installed
-  when: changedetection_playwright_driver_enabled | bool
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/{{ item }}.j2"
-    dest: "{{ changedetection_base_path }}/{{ item }}"
-    mode: "0640"
-    owner: "{{ changedetection_uid }}"
-    group: "{{ changedetection_gid }}"
-  with_items:
-    - playwright-env
-  register: changedetection_playwright_driver_support_files_result
-
 - name: Run if self-building of Changedetection.io container image is not enabled
   when: "not changedetection_container_image_self_build | bool"
   block:
@@ -92,28 +80,6 @@
       register: changedetection_container_image_build_result
       changed_when: "'Successfully built' in changedetection_container_image_build_result.stdout or ('writing image' in changedetection_container_image_build_result.stderr and 'CACHED' not in changedetection_container_image_build_result.stderr)"
 
-- name: Ensure Changedetection.io playwright-driver container image is pulled via community.docker.docker_image
-  when: changedetection_playwright_driver_enabled | bool
-  community.docker.docker_image:
-    name: "{{ changedetection_playwright_driver_container_image }}"
-    source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
-    force_source: "{{ changedetection_playwright_driver_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
-    force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else changedetection_playwright_driver_container_image_force_pull }}"
-  register: changedetection_playwright_driver_container_image_pull_result
-  retries: "{{ devture_playbook_help_container_retries_count }}"
-  delay: "{{ devture_playbook_help_container_retries_delay }}"
-  until: changedetection_playwright_driver_container_image_pull_result is not failed
-
-- name: Ensure Changedetection.io playwright-driver container image is pulled via ansible.builtin.command
-  when: devture_systemd_docker_base_container_image_pull_method == 'command'
-  ansible.builtin.command:
-    cmd: "{{ devture_systemd_docker_base_host_command_docker }} pull {{ changedetection_playwright_driver_container_image }}"
-  register: changedetection_playwright_driver_container_image_pull_result
-  retries: "{{ devture_playbook_help_container_retries_count }}"
-  delay: "{{ devture_playbook_help_container_retries_delay }}"
-  until: changedetection_playwright_driver_container_image_pull_result is not failed
-  changed_when: "'Downloaded newer image' in changedetection_playwright_driver_container_image_pull_result.stdout"
-
 - name: Ensure Changedetection.io container network is created via community.docker.docker_network
   when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
   community.docker.docker_network:
@@ -142,13 +108,48 @@
     mode: "0644"
   register: changedetection_systemd_service_result
 
-- name: Ensure Changedetection.io playwright-driver systemd service is present
+- name: Run if Playwright webdriver is enabled for Changedetection.io
   when: changedetection_playwright_driver_enabled | bool
-  ansible.builtin.template:
-    src: "{{ role_path }}/templates/systemd/changedetection-playwright-driver.service.j2"
-    dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
-    mode: "0644"
-  register: changedetection_playwright_driver_systemd_service_result
+  block:
+    - name: Ensure Changedetection.io playwright-driver support files installed
+      ansible.builtin.template:
+        src: "{{ role_path }}/templates/{{ item }}.j2"
+        dest: "{{ changedetection_base_path }}/{{ item }}"
+        mode: "0640"
+        owner: "{{ changedetection_uid }}"
+        group: "{{ changedetection_gid }}"
+      with_items:
+        - playwright-env
+      register: changedetection_playwright_driver_support_files_result
+
+    - name: Ensure Changedetection.io playwright-driver container image is pulled via community.docker.docker_image
+      when: devture_systemd_docker_base_container_image_pull_method == 'ansible-module'
+      community.docker.docker_image:
+        name: "{{ changedetection_playwright_driver_container_image }}"
+        source: "{{ 'pull' if ansible_version.major > 2 or ansible_version.minor > 7 else omit }}"
+        force_source: "{{ changedetection_playwright_driver_container_image_force_pull if ansible_version.major > 2 or ansible_version.minor >= 8 else omit }}"
+        force: "{{ omit if ansible_version.major > 2 or ansible_version.minor >= 8 else changedetection_playwright_driver_container_image_force_pull }}"
+      register: changedetection_playwright_driver_container_image_pull_result
+      retries: "{{ devture_playbook_help_container_retries_count }}"
+      delay: "{{ devture_playbook_help_container_retries_delay }}"
+      until: changedetection_playwright_driver_container_image_pull_result is not failed
+
+    - name: Ensure Changedetection.io playwright-driver container image is pulled via ansible.builtin.command
+      when: devture_systemd_docker_base_container_image_pull_method == 'command'
+      ansible.builtin.command:
+        cmd: "{{ devture_systemd_docker_base_host_command_docker }} pull {{ changedetection_playwright_driver_container_image }}"
+      register: changedetection_playwright_driver_container_image_pull_result
+      retries: "{{ devture_playbook_help_container_retries_count }}"
+      delay: "{{ devture_playbook_help_container_retries_delay }}"
+      until: changedetection_playwright_driver_container_image_pull_result is not failed
+      changed_when: "'Downloaded newer image' in changedetection_playwright_driver_container_image_pull_result.stdout"
+
+    - name: Ensure Changedetection.io playwright-driver systemd service is present
+      ansible.builtin.template:
+        src: "{{ role_path }}/templates/systemd/changedetection-playwright-driver.service.j2"
+        dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_playwright_driver_identifier }}.service"
+        mode: "0644"
+      register: changedetection_playwright_driver_systemd_service_result
 
 - name: Determine whether changedetection needs a restart
   ansible.builtin.set_fact:
