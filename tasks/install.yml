@@ -151,7 +151,7 @@
         mode: "0644"
       register: changedetection_playwright_driver_systemd_service_result
 
-- name: Determine whether changedetection needs a restart
+- name: Determine whether Changedetection.io needs a restart
   ansible.builtin.set_fact:
     changedetection_restart_necessary: >-
       {{
