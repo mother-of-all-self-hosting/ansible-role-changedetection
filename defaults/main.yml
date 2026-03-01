@@ -194,6 +194,37 @@ changedetection_systemd_wanted_services_list_default: []
 changedetection_systemd_wanted_services_list_auto: []
 changedetection_systemd_wanted_services_list_custom: []
 
+# Controls how long to wait for the container to stop gracefully before killing it.
+changedetection_container_stop_grace_time_seconds: "{{ devture_systemd_docker_base_container_stop_grace_time_seconds }}"
+
+# Controls how long the pre-start cleanup should wait for stale container-name release
+# before failing startup explicitly.
+changedetection_container_cleanup_timeout_seconds: "{{ devture_systemd_docker_base_container_cleanup_timeout_seconds }}"
+
+# Controls the delay between pre-start cleanup retries.
+changedetection_container_cleanup_retry_delay_seconds: "{{ devture_systemd_docker_base_container_cleanup_retry_delay_seconds }}"
+
+# Shell command used in the systemd pre-start phase to deterministically remove a stale
+# container and wait until Docker releases its name.
+changedetection_container_cleanup_command: |
+  i=0;
+  while [ "$i" -lt {{ changedetection_container_cleanup_timeout_seconds }} ]; do
+  {{ devture_systemd_docker_base_host_command_docker }} stop -t {{ changedetection_container_stop_grace_time_seconds }} {{ changedetection_identifier }} >/dev/null 2>&1 || true;
+  {{ devture_systemd_docker_base_host_command_docker }} rm -f {{ changedetection_identifier }} >/dev/null 2>&1 || true;
+  if {{ devture_systemd_docker_base_host_command_docker }} container inspect {{ changedetection_identifier }} >/dev/null 2>&1; then
+  i=$((i + 1));
+  sleep {{ changedetection_container_cleanup_retry_delay_seconds }};
+  continue;
+  fi;
+  if {{ devture_systemd_docker_base_host_command_docker }} info >/dev/null 2>&1; then
+  exit 0;
+  fi;
+  echo "Failed to query Docker daemon while cleaning up {{ changedetection_identifier }}" >&2;
+  exit 1;
+  done;
+  echo "Failed to remove stale container {{ changedetection_identifier }} after {{ changedetection_container_cleanup_timeout_seconds }} attempts" >&2;
+  exit 1
+
 changedetection_http_proxy: ""
 changedetection_https_proxy: ""
 changedetection_no_proxy: ""
@@ -264,6 +295,37 @@ changedetection_playwright_driver_systemd_wanted_services_list: "{{ changedetect
 changedetection_playwright_driver_systemd_wanted_services_list_default: []
 changedetection_playwright_driver_systemd_wanted_services_list_auto: []
 changedetection_playwright_driver_systemd_wanted_services_list_custom: []
+
+# Controls how long to wait for the container to stop gracefully before killing it.
+changedetection_playwright_driver_container_stop_grace_time_seconds: "{{ devture_systemd_docker_base_container_stop_grace_time_seconds }}"
+
+# Controls how long the pre-start cleanup should wait for stale container-name release
+# before failing startup explicitly.
+changedetection_playwright_driver_container_cleanup_timeout_seconds: "{{ devture_systemd_docker_base_container_cleanup_timeout_seconds }}"
+
+# Controls the delay between pre-start cleanup retries.
+changedetection_playwright_driver_container_cleanup_retry_delay_seconds: "{{ devture_systemd_docker_base_container_cleanup_retry_delay_seconds }}"
+
+# Shell command used in the systemd pre-start phase to deterministically remove a stale
+# container and wait until Docker releases its name.
+changedetection_playwright_driver_container_cleanup_command: |
+  i=0;
+  while [ "$i" -lt {{ changedetection_playwright_driver_container_cleanup_timeout_seconds }} ]; do
+  {{ devture_systemd_docker_base_host_command_docker }} stop -t {{ changedetection_playwright_driver_container_stop_grace_time_seconds }} {{ changedetection_playwright_driver_identifier }} >/dev/null 2>&1 || true;
+  {{ devture_systemd_docker_base_host_command_docker }} rm -f {{ changedetection_playwright_driver_identifier }} >/dev/null 2>&1 || true;
+  if {{ devture_systemd_docker_base_host_command_docker }} container inspect {{ changedetection_playwright_driver_identifier }} >/dev/null 2>&1; then
+  i=$((i + 1));
+  sleep {{ changedetection_playwright_driver_container_cleanup_retry_delay_seconds }};
+  continue;
+  fi;
+  if {{ devture_systemd_docker_base_host_command_docker }} info >/dev/null 2>&1; then
+  exit 0;
+  fi;
+  echo "Failed to query Docker daemon while cleaning up {{ changedetection_playwright_driver_identifier }}" >&2;
+  exit 1;
+  done;
+  echo "Failed to remove stale container {{ changedetection_playwright_driver_identifier }} after {{ changedetection_playwright_driver_container_cleanup_timeout_seconds }} attempts" >&2;
+  exit 1
 
 changedetection_playwright_driver_url: "{{ 'ws://' + changedetection_playwright_driver_identifier + ':3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else '' }}"
 
