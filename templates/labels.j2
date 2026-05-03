@@ -1,7 +1,7 @@
 {#
 SPDX-FileCopyrightText: 2023 Niels Bouma
 SPDX-FileCopyrightText: 2023 Slavi Pantaleev
-SPDX-FileCopyrightText: 2025 Suguru Hirahara
+SPDX-FileCopyrightText: 2025, 2026 Suguru Hirahara
 
 SPDX-License-Identifier: Apache-2.0
 #}
@@ -14,6 +14,11 @@ traefik.docker.network={{ changedetection_container_labels_traefik_docker_networ
 {% endif %}
 
 {% set middlewares = [] %}
+
+{% if changedetection_container_labels_traefik_middleware_basic_auth_enabled %}
+{% set middlewares = middlewares + [changedetection_identifier + '-basic-auth'] %}
+traefik.http.middlewares.{{ changedetection_identifier }}-basic-auth.basicauth.users={{ changedetection_container_labels_traefik_middleware_basic_auth_users }}
+{% endif %}
 
 {% if changedetection_container_labels_traefik_path_prefix != '/' %}
 traefik.http.middlewares.{{ changedetection_identifier }}-slashless-redirect.redirectregex.regex=^({{ changedetection_container_labels_traefik_path_prefix | quote }})$

@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2023 Niels Bouma
-# SPDX-FileCopyrightText: 2023 - 2024 Nikita Chernyi
-# SPDX-FileCopyrightText: 2023 - 2025 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2023, 2024 Nikita Chernyi
+# SPDX-FileCopyrightText: 2023-2025 Slavi Pantaleev
 # SPDX-FileCopyrightText: 2024 Sergio Durigan Junior
 # SPDX-FileCopyrightText: 2025 MASH project contributors
-# SPDX-FileCopyrightText: 2025 Suguru Hirahara
+# SPDX-FileCopyrightText: 2025, 2026 Suguru Hirahara
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -89,6 +89,9 @@ changedetection_container_labels_traefik_priority: 0
 changedetection_container_labels_traefik_entrypoints: web-secure
 changedetection_container_labels_traefik_tls: "{{ changedetection_container_labels_traefik_entrypoints != 'web' }}"
 changedetection_container_labels_traefik_tls_certResolver: default  # noqa var-naming
+changedetection_container_labels_traefik_middleware_basic_auth_enabled: false
+# See: https://doc.traefik.io/traefik/reference/routing-configuration/http/middlewares/basicauth/
+changedetection_container_labels_traefik_middleware_basic_auth_users: ""
 
 # Controls which additional headers to attach to all HTTP requests.
 # To add your own custom request headers, use `changedetection_container_labels_traefik_additional_request_headers_custom`
