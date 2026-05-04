@@ -37,7 +37,6 @@ changedetection_container_image_tag: "{{ changedetection_version }}"
 changedetection_container_image_registry_prefix: "{{ changedetection_container_image_registry_prefix_upstream }}"
 changedetection_container_image_registry_prefix_upstream: "{{ changedetection_container_image_registry_prefix_upstream_default }}"
 changedetection_container_image_registry_prefix_upstream_default: ghcr.io/
-changedetection_container_image_force_pull: "{{ changedetection_container_image.endswith(':latest') }}"
 
 changedetection_container_image_self_build: false
 changedetection_container_image_self_build_name: "dgtlmoon/changedetection:{{ changedetection_container_image_self_build_repo_version }}"
@@ -270,7 +269,6 @@ changedetection_playwright_driver_container_image_tag: "{{ changedetection_playw
 changedetection_playwright_driver_container_image_registry_prefix: "{{ changedetection_playwright_driver_container_image_registry_prefix_upstream }}"
 changedetection_playwright_driver_container_image_registry_prefix_upstream: "{{ changedetection_playwright_driver_container_image_registry_prefix_upstream_default }}"
 changedetection_playwright_driver_container_image_registry_prefix_upstream_default: docker.io/
-changedetection_playwright_driver_container_image_force_pull: "{{ changedetection_playwright_driver_container_image.endswith(':latest') }}"
 
 # A list of additional container networks that the container would be connected to.
 # The role does not create these networks, so make sure they already exist.
