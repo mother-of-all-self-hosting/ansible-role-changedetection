@@ -239,6 +239,8 @@ changedetection_hide_referer: false
 # Specify the timezone
 changedetection_environment_variables_tz: UTC
 
+changedetection_environment_variables_llm_features_disabled: true
+
 # Additional environment variables.
 changedetection_environment_variables_additional_variables: ""
 
