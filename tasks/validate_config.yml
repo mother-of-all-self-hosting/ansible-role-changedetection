@@ -21,15 +21,14 @@
 - name: Fail if required Changedetection.io settings not defined
   ansible.builtin.fail:
     msg: >-
-      You need to define a required configuration setting (`{{ item.name }}`).
-  when: "item.when | bool and lookup('vars', item.name, default='') | string | length == 0"
+      You need to define a required configuration setting (`{{ item }}`).
+  when: "lookup('vars', item, default='') | string | length == 0"
   with_items:
-    - { "name": "changedetection_uid", when: true }
-    - { "name": "changedetection_gid", when: true }
-    - { "name": "changedetection_hostname", when: true }
-    - { "name": "changedetection_path_prefix", when: true }
-    - { "name": "changedetection_container_network", when: true }
-    - { "name": "changedetection_container_labels_traefik_middleware_basic_auth_users", when: "{{ changedetection_container_labels_traefik_middleware_basic_auth_enabled }}" }
+    - changedetection_uid
+    - changedetection_gid
+    - changedetection_hostname
+    - changedetection_path_prefix
+    - changedetection_container_network
 
 - name: Run if Traefik is enabled
   when: changedetection_container_labels_traefik_enabled | bool
@@ -37,11 +36,12 @@
     - name: Fail if Traefik settings required for Changedetection.io are not defined
       ansible.builtin.fail:
         msg: >-
-          You need to define a required configuration setting (`{{ item }}`).
-      when: "lookup('vars', item, default='') | string | length == 0"
+          You need to define a required configuration setting (`{{ item.name }}`).
+      when: "item.when | bool and lookup('vars', item.name, default='') | string | length == 0"
       with_items:
-        - changedetection_container_labels_traefik_hostname
-        - changedetection_container_labels_traefik_path_prefix
+        - { "name": "changedetection_container_labels_traefik_hostname", when: true }
+        - { "name": "changedetection_container_labels_traefik_path_prefix", when: true }
+        - { "name": "changedetection_container_labels_traefik_middleware_basic_auth_users", when: "{{ changedetection_container_labels_traefik_middleware_basic_auth_enabled }}" }
 
     # We ensure it doesn't end with a slash, because we handle both (slash and no-slash).
     # Knowing that `changedetection_container_labels_traefik_path_prefix` does not end with a slash
