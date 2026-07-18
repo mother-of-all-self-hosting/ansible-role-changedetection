@@ -1,8 +1,10 @@
 ---
 galaxy_info:
   author: Niels Bouma
+  company: mash
   role_name: changedetection
-  description: Ansible role to install an Changedetection.io instance
+  namespace: mash
+  description: Changedetection.io
   platforms:
     - name: Debian
       versions:
