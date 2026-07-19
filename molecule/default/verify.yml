@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 Suguru Hirahara
+# SPDX-FileCopyrightText: 2026 spatterlight
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+- name: Verify Changedetection.io systemd service
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Wait for Changedetection.io service to become active (up to 180s)
+      ansible.builtin.systemd:
+        name: changedetection.service
+      register: changedetection_service
+      until: changedetection_service.status.ActiveState == 'active'
+      retries: 36
+      delay: 5
+
+    - name: Assert Changedetection.io service is active
+      ansible.builtin.assert:
+        that: changedetection_service.status.ActiveState == 'active'
+        fail_msg: "changedetection.service not active ({{ changedetection_service.status.ActiveState }})"
+        success_msg: "changedetection.service is active"
+
+    - name: Retrieve Changedetection.io service log for debugging
+      when: changedetection_debug_service_enabled | bool
+      ansible.builtin.command:
+        cmd: journalctl -xeu changedetection.service
+      changed_when: false
+
+    - name: Wait for Changedetection.io HTTP endpoint to respond (up to 10m)
+      ansible.builtin.uri:
+        url: "http://localhost:5000/"
+        method: GET
+        status_code: [200, 301, 302]
+        follow_redirects: none
+      register: changedetection_endpoint
+      until: changedetection_endpoint.status in [200, 301, 302]
+      retries: 120
+      delay: 5
+
+    - name: Assert Changedetection.io HTTP endpoint responds
+      ansible.builtin.assert:
+        that: changedetection_endpoint.status in [200, 301, 302]
+        fail_msg: "Changedetection.io did not respond as expected ({{ changedetection_endpoint.status | default('no response') }})"
+        success_msg: "Changedetection.io responded with {{ changedetection_endpoint.status }}"
+
+    - name: Show Changedetection.io systemd service status summary
+      ansible.builtin.debug:
+        msg:
+          - "Changedetection.io systemd: {{ changedetection_service.status.ActiveState }}"
+          - "Changedetection.io HTTP: {{ changedetection_endpoint.status }}"

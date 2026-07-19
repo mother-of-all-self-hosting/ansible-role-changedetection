@@ -20,6 +20,14 @@ Check [`defaults/main.yml`](defaults/main.yml) for the full list of supported op
 
 ## Development
 
+### pre-commit
+
 You can optionally install [pre-commit](https://pre-commit.com/) so that simple mistakes are checked and noticed before changes are pushed to a remote branch. See [`.pre-commit-config.yaml`](./.pre-commit-config.yaml) for which hooks are to be executed.
 
 See [this section](https://pre-commit.com/#usage) on the official documentation for usage.
+
+### Molecule
+
+This role supports [Molecule](https://docs.ansible.com/projects/molecule/), an Ansible testing framework designed for developing and testing Ansible collections, playbooks, and roles.
+
+Refer to [this page](./molecule/README.md) for details about how to utilize it.
