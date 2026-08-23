@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Suguru Hirahara
 # SPDX-FileCopyrightText: 2026 spatterlight
+# SPDX-FileCopyrightText: 2026 Slavi Pantaleev
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -12,7 +13,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: changedetection-${MOLECULE_DISTRO:-ubuntu2604}-default
+  - name: changedetection-${MOLECULE_DISTRO:-ubuntu2604}-default-selfbuild
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2604}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -37,7 +38,7 @@ provisioner:
         changedetection_scheme: http
         changedetection_hostname: localhost
         changedetection_container_labels_traefik_enabled: false
-        changedetection_container_http_host_bind_port: 5000
+        changedetection_container_http_host_bind_port: 127.0.0.1:5000
 
         # Test self-building
         changedetection_container_image_self_build: true

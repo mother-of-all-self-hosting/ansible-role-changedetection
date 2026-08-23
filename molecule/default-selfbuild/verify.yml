@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2026 Suguru Hirahara
 # SPDX-FileCopyrightText: 2026 spatterlight
+# SPDX-FileCopyrightText: 2026 Slavi Pantaleev
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -29,22 +30,27 @@
         cmd: journalctl -xeu changedetection.service
       changed_when: false
 
-    - name: Wait for Changedetection.io HTTP endpoint to respond (up to 10m)
+    # A self-built Changedetection.io that cannot load its datastore still
+    # listens on this port, but answers 500 here, so only a rendered watch list
+    # says that the image built from source actually runs. Redirects are not
+    # followed, so that a future login redirect cannot be mistaken for one.
+    - name: Wait for the self-built Changedetection.io to serve the watch list (up to 10m)
       ansible.builtin.uri:
-        url: "http://localhost:5000/"
+        url: "http://127.0.0.1:5000/"
         method: GET
-        status_code: [200, 301, 302]
+        status_code: [200]
         follow_redirects: none
+        return_content: true
       register: changedetection_endpoint
-      until: changedetection_endpoint.status in [200, 301, 302]
+      until: changedetection_endpoint.status == 200
       retries: 120
       delay: 5
 
-    - name: Assert Changedetection.io HTTP endpoint responds
+    - name: Assert the self-built Changedetection.io web interface rendered
       ansible.builtin.assert:
-        that: changedetection_endpoint.status in [200, 301, 302]
-        fail_msg: "Changedetection.io did not respond as expected ({{ changedetection_endpoint.status | default('no response') }})"
-        success_msg: "Changedetection.io responded with {{ changedetection_endpoint.status }}"
+        that: "'<title>Change Detection</title>' in changedetection_endpoint.content"
+        fail_msg: "The self-built Changedetection.io did not render its watch list"
+        success_msg: "The self-built Changedetection.io serves its watch list"
 
     - name: Show Changedetection.io systemd service status summary
       ansible.builtin.debug:
