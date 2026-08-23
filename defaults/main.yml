@@ -16,7 +16,7 @@ changedetection_identifier: changedetection
 changedetection_base_path: "/{{ changedetection_identifier }}"
 changedetection_data_path: "{{ changedetection_base_path }}/data"
 
-# renovate: datasource=docker depName=ghcr.io/dgtlmoon/changedetection.io
+# renovate: datasource=docker depName=ghcr.io/dgtlmoon/changedetection.io versioning=semver
 changedetection_version: 0.55.8
 
 changedetection_uid: ""
