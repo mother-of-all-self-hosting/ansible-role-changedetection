@@ -52,7 +52,7 @@
         fail_msg: "The self-built Changedetection.io did not render its watch list"
         success_msg: "The self-built Changedetection.io serves its watch list"
 
-    - name: Show Changedetection.io systemd service status summary
+    - name: Show Changedetection.io verification summary
       ansible.builtin.debug:
         msg:
           - "Changedetection.io systemd: {{ changedetection_service.status.ActiveState }}"
