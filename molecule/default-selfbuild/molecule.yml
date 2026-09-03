@@ -32,13 +32,25 @@ provisioner:
         # Helper variables
         changedetection_debug_service_enabled: false
 
+        # The port on the host that the Changedetection.io web interface and
+        # API are published on, for `verify.yml` to probe.
+        changedetection_molecule_http_bind_port: 5000
+
         # Variables for Changedetection.io
         changedetection_uid: 1000
         changedetection_gid: 1000
         changedetection_scheme: http
         changedetection_hostname: localhost
         changedetection_container_labels_traefik_enabled: false
-        changedetection_container_http_host_bind_port: 127.0.0.1:5000
+        changedetection_container_http_host_bind_port: "127.0.0.1:{{ changedetection_molecule_http_bind_port }}"
+
+        # `verify.yml` makes Changedetection.io watch a throwaway HTTP server
+        # running next to it on the role's own container network, rather than
+        # some page on the internet. Changedetection.io refuses to fetch
+        # private/reserved addresses unless told otherwise - a sane default for
+        # a real deployment, but it blocks that watch, so the scenario opts out.
+        changedetection_environment_variables_additional_variables: |
+          ALLOW_IANA_RESTRICTED_ADDRESSES=true
 
         # Test self-building
         changedetection_container_image_self_build: true

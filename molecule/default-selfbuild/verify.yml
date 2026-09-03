@@ -5,55 +5,34 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-- name: Verify Changedetection.io systemd service
+- name: Verify Changedetection.io
   hosts: all
   become: true
   gather_facts: false
+
+  vars:
+    changedetection_verify_base_url: "http://127.0.0.1:{{ changedetection_molecule_http_bind_port }}"
+
+    # `changedetection_data_path`, which the role bind-mounts into the
+    # container at `/datastore`. Spelled out here because the role's own
+    # default for it is a Jinja expression over other defaults, and the role
+    # is not included in this play, so those are not in scope.
+    changedetection_verify_data_path: /changedetection/data
+
+    # Changedetection.io writes its whole configuration - the generated API
+    # access token included - into this single file on the data volume.
+    changedetection_verify_datastore_file_path: "{{ changedetection_verify_data_path }}/changedetection.json"
+
+    # `changedetection_container_network`, spelled out for the same reason.
+    changedetection_verify_container_network: changedetection
+
+    # A throwaway HTTP server started on that network below, giving the watch
+    # created through the API something local to fetch. Watching a page on the
+    # internet would make this test depend on the internet and on that page.
+    changedetection_verify_target_container_name: changedetection-molecule-whoami
+    changedetection_verify_target_url: "http://{{ changedetection_verify_target_container_name }}/"
+
   tasks:
-    - name: Wait for Changedetection.io service to become active (up to 180s)
-      ansible.builtin.systemd:
-        name: changedetection.service
-      register: changedetection_service
-      until: changedetection_service.status.ActiveState == 'active'
-      retries: 36
-      delay: 5
-
-    - name: Assert Changedetection.io service is active
-      ansible.builtin.assert:
-        that: changedetection_service.status.ActiveState == 'active'
-        fail_msg: "changedetection.service not active ({{ changedetection_service.status.ActiveState }})"
-        success_msg: "changedetection.service is active"
-
-    - name: Retrieve Changedetection.io service log for debugging
-      when: changedetection_debug_service_enabled | bool
-      ansible.builtin.command:
-        cmd: journalctl -xeu changedetection.service
-      changed_when: false
-
-    # A self-built Changedetection.io that cannot load its datastore still
-    # listens on this port, but answers 500 here, so only a rendered watch list
-    # says that the image built from source actually runs. Redirects are not
-    # followed, so that a future login redirect cannot be mistaken for one.
-    - name: Wait for the self-built Changedetection.io to serve the watch list (up to 10m)
-      ansible.builtin.uri:
-        url: "http://127.0.0.1:5000/"
-        method: GET
-        status_code: [200]
-        follow_redirects: none
-        return_content: true
-      register: changedetection_endpoint
-      until: changedetection_endpoint.status == 200
-      retries: 120
-      delay: 5
-
-    - name: Assert the self-built Changedetection.io web interface rendered
-      ansible.builtin.assert:
-        that: "'<title>Change Detection</title>' in changedetection_endpoint.content"
-        fail_msg: "The self-built Changedetection.io did not render its watch list"
-        success_msg: "The self-built Changedetection.io serves its watch list"
-
-    - name: Show Changedetection.io verification summary
-      ansible.builtin.debug:
-        msg:
-          - "Changedetection.io systemd: {{ changedetection_service.status.ActiveState }}"
-          - "Changedetection.io HTTP: {{ changedetection_endpoint.status }}"
+    - name: Run the checks shared by all Changedetection.io scenarios
+      ansible.builtin.include_tasks:
+        file: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/molecule/verify_tasks.yml"
