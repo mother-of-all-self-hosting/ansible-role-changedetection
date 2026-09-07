@@ -104,16 +104,12 @@
     return_content: true
   register: changedetection_systeminfo
 
-# Changedetection.io reports its version without a leading `v` (`0.55.8`),
-# the same way the role's version variable does. Compared as a prefix, with
-# any leading `v` normalized away on both sides, so that this keeps holding
-# if either side ever starts carrying one or a build suffix.
+# Changedetection.io reports its version with a leading `v` (`v0.107.79`), the
+# same way the role's version variable carries one. Any leading `v` is normalized
+# away on both sides, so that this keeps holding if either side ever changes.
 - name: Assert the running Changedetection.io is the version this role installs
   ansible.builtin.assert:
-    that: >-
-      (changedetection_systeminfo.json.version | regex_replace('^v', '')).startswith(
-        changedetection_defaults.changedetection_version | regex_replace('^v', '')
-      )
+    that: (changedetection_systeminfo.json.version | regex_replace('^v', '')) == (changedetection_defaults.changedetection_version | regex_replace('^v', ''))
     fail_msg: "Changedetection.io reports {{ changedetection_systeminfo.json.version | default('none') }}, expected {{ changedetection_defaults.changedetection_version }}"
     success_msg: "Changedetection.io reports {{ changedetection_systeminfo.json.version }}"
 
