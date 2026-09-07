@@ -114,10 +114,8 @@
       (changedetection_systeminfo.json.version | regex_replace('^v', '')).startswith(
         changedetection_defaults.changedetection_version | regex_replace('^v', '')
       )
-    fail_msg: >-
-      Changedetection.io reports {{ changedetection_systeminfo.json.version | default('no version') }},
-      but the role asks for {{ changedetection_defaults.changedetection_version }}
-    success_msg: "Changedetection.io reports version {{ changedetection_systeminfo.json.version }}"
+    fail_msg: "Changedetection.io reports {{ changedetection_systeminfo.json.version | default('none') }}, expected {{ changedetection_defaults.changedetection_version }}"
+    success_msg: "Changedetection.io reports {{ changedetection_systeminfo.json.version }}"
 
 # Watching a page for changes is the one thing this role exists to deploy,
 # and none of the probes above exercise it: the fetcher is a separate
