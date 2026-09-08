@@ -36,7 +36,7 @@
 - name: Retrieve the Changedetection.io systemd service log for debugging
   when: changedetection_debug_service_enabled | bool
   ansible.builtin.command:
-    cmd: journalctl -xeu changedetection.service
+    cmd: journalctl --no-pager --output=cat --unit=changedetection.service
   changed_when: false
 
 # The watch list is the application's own page, rendered from the datastore
