@@ -130,7 +130,7 @@
 - name: Start a throwaway HTTP server on the Changedetection.io container network
   ansible.builtin.command:
     cmd: >-
-      docker run --detach --rm
+      docker run -d --rm
       --name={{ changedetection_verify_target_container_name }}
       --network={{ changedetection_verify_container_network }}
       docker.io/traefik/whoami:latest
