@@ -35,9 +35,9 @@
   tasks:
     - name: Verify that Changedetection.io works
       block:
-    - name: Run the checks shared by all Changedetection.io scenarios
-      ansible.builtin.include_tasks:
-        file: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/molecule/verify_tasks.yml"
+        - name: Run the checks shared by all Changedetection.io scenarios
+          ansible.builtin.include_tasks:
+            file: "{{ lookup('ansible.builtin.env', 'MOLECULE_PROJECT_DIRECTORY') }}/molecule/verify_tasks.yml"
 
       rescue:
         # Whatever went wrong, the reason is almost always in the systemd service log.
