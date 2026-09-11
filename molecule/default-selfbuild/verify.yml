@@ -32,6 +32,9 @@
     changedetection_verify_target_container_name: changedetection-molecule-whoami
     changedetection_verify_target_url: "http://{{ changedetection_verify_target_container_name }}/"
 
+    changedetection_verify_units:
+      - changedetection.service
+
   tasks:
     - name: Verify that Changedetection.io works
       block:

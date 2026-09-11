@@ -13,13 +13,14 @@
     file: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/defaults/main.yml"
     name: changedetection_defaults
 
-- name: Wait for the Changedetection.io systemd service to become active (up to 180s)
+- name: Wait for the Changedetection.io systemd services to become active (up to 180s each)
   ansible.builtin.systemd_service:
-    name: changedetection.service
-  register: changedetection_service
-  until: changedetection_service.status.ActiveState == 'active'
+    name: "{{ item }}"
+  register: changedetection_services
+  until: changedetection_services.status.ActiveState == 'active'
   retries: 36
   delay: 5
+  loop: "{{ changedetection_verify_units }}"
   # So that giving up is reported by the assertion below rather than as a
   # wall of systemd unit properties.
   failed_when: false
@@ -27,17 +28,20 @@
 # `Restart=always` in the systemd unit means that even a container which crashes
 # and gets restarted reads as active here, so this is a precondition rather than
 # a result.
-- name: Assert the Changedetection.io systemd service is active
+- name: Assert the Changedetection.io systemd services are active
   ansible.builtin.assert:
-    that: changedetection_service.status.ActiveState == 'active'
-    fail_msg: "changedetection.service is not active ({{ changedetection_service.status.ActiveState }})"
-    success_msg: "changedetection.service is active"
+    that: changedetection_services.results | map(attribute='status.ActiveState') | unique | list == ['active']
+    fail_msg: >-
+      Not every service is active:
+      {{ dict(changedetection_verify_units | zip(changedetection_services.results | map(attribute='status.ActiveState'))) }}
+    success_msg: "Every systemd service is active"
 
-- name: Retrieve the Changedetection.io systemd service log for debugging
+- name: Retrieve the Changedetection.io systemd services log for debugging
   when: changedetection_debug_service_enabled | bool
   ansible.builtin.command:
-    cmd: journalctl --no-pager --output=cat --unit=changedetection.service
+    cmd: "journalctl --no-pager --output=cat --unit={{ item }}"
   changed_when: false
+  loop: "{{ changedetection_verify_units }}"
 
 # The watch list is the application's own page, rendered from the datastore
 # on the mounted volume. A Changedetection.io that cannot read that
@@ -239,7 +243,7 @@
 - name: Show the Changedetection.io verification summary
   ansible.builtin.debug:
     msg:
-      - "Changedetection.io systemd: {{ changedetection_service.status.ActiveState }}"
+      - "Changedetection.io systemd: {% for unit, state in changedetection_verify_units | zip(changedetection_services.results | map(attribute='status.ActiveState')) %}{{ unit }} ({{ state }}){% if not loop.last %}, {% endif %}{% endfor %}"
       - "Changedetection.io version: {{ changedetection_systeminfo.json.version }}"
       - "Changedetection.io watches: {{ changedetection_systeminfo.json.watch_count }}"
       - "Watch created: {{ changedetection_watch_creation.json.uuid }}"
