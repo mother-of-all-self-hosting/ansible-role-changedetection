@@ -39,7 +39,10 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
       {% for arg in changedetection_container_extra_arguments %}
       {{ arg }} \
       {% endfor %}
-      {{ changedetection_container_image_self_build_name if changedetection_container_image_self_build else changedetection_container_image }}
+      {{ changedetection_container_image_self_build_name if changedetection_container_image_self_build else changedetection_container_image }} \
+      {% for arg in changedetection_process_extra_arguments %}
+      {{ arg }} \
+      {% endfor %}
 
 {% for network in changedetection_container_additional_networks %}
 ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} network connect {{ network }} {{ changedetection_identifier }}

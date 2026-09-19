@@ -132,6 +132,12 @@ changedetection_container_extra_arguments: "{{ changedetection_container_extra_a
 changedetection_container_extra_arguments_auto: []
 changedetection_container_extra_arguments_custom: []
 
+# A list of extra arguments to pass to the process inside the container
+# Example: ['--SOME_ARGUMENT']
+changedetection_process_extra_arguments: "{{ changedetection_process_extra_arguments_auto + changedetection_process_extra_arguments_custom }}"
+changedetection_process_extra_arguments_auto: []
+changedetection_process_extra_arguments_custom: []
+
 # Specifies the value of the `X-XSS-Protection` header
 # Stops pages from loading when they detect reflected cross-site scripting (XSS) attacks.
 #
@@ -286,6 +292,12 @@ changedetection_playwright_driver_container_tmpfs_tmp_size: 512m
 changedetection_playwright_driver_container_extra_arguments: "{{ changedetection_playwright_driver_container_extra_arguments_auto + changedetection_playwright_driver_container_extra_arguments_custom }}"
 changedetection_playwright_driver_container_extra_arguments_auto: []
 changedetection_playwright_driver_container_extra_arguments_custom: []
+
+# A list of extra arguments to pass to the process inside the container
+# Example: ['--SOME_ARGUMENT']
+changedetection_playwright_driver_process_extra_arguments: "{{ changedetection_playwright_driver_process_extra_arguments_auto + changedetection_playwright_driver_process_extra_arguments_custom }}"
+changedetection_playwright_driver_process_extra_arguments_auto: []
+changedetection_playwright_driver_process_extra_arguments_custom: []
 
 # List of systemd services that the Changedetection.io Playwright driver systemd service depends on
 changedetection_playwright_driver_systemd_required_services_list: "{{ changedetection_playwright_driver_systemd_required_services_list_default + changedetection_playwright_driver_systemd_required_services_list_auto + changedetection_playwright_driver_systemd_required_services_list_custom }}"
