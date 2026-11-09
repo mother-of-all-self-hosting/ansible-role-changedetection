@@ -21,7 +21,7 @@ traefik.http.middlewares.{{ changedetection_identifier }}-basic-auth.basicauth.u
 {% endif %}
 
 {% if changedetection_container_labels_traefik_path_prefix != '/' %}
-traefik.http.middlewares.{{ changedetection_identifier }}-slashless-redirect.redirectregex.regex=^({{ changedetection_container_labels_traefik_path_prefix | quote }})$
+traefik.http.middlewares.{{ changedetection_identifier }}-slashless-redirect.redirectregex.regex=^(https?://[^/]+{{ changedetection_container_labels_traefik_path_prefix | regex_escape }})$
 traefik.http.middlewares.{{ changedetection_identifier }}-slashless-redirect.redirectregex.replacement=${1}/
 {% set middlewares = middlewares + [changedetection_identifier + '-slashless-redirect'] %}
 {% endif %}
