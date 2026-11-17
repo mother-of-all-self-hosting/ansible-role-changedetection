@@ -1,17 +1,17 @@
 <!--
-SPDX-FileCopyrightText: 2020 - 2024 MDAD project contributors
-SPDX-FileCopyrightText: 2020 - 2024 Slavi Pantaleev
 SPDX-FileCopyrightText: 2020 Aaron Raimist
 SPDX-FileCopyrightText: 2020 Chris van Dijk
 SPDX-FileCopyrightText: 2020 Dominik Zajac
 SPDX-FileCopyrightText: 2020 Mickaël Cornière
+SPDX-FileCopyrightText: 2020-2024 MDAD project contributors
+SPDX-FileCopyrightText: 2020-2024 Slavi Pantaleev
 SPDX-FileCopyrightText: 2022 François Darveau
 SPDX-FileCopyrightText: 2022 Julian Foad
 SPDX-FileCopyrightText: 2022 Warren Bailey
 SPDX-FileCopyrightText: 2023 Antonis Christofides
 SPDX-FileCopyrightText: 2023 Felix Stupp
 SPDX-FileCopyrightText: 2023 Pierre 'McFly' Marty
-SPDX-FileCopyrightText: 2024 - 2025 Suguru Hirahara
+SPDX-FileCopyrightText: 2024-2026 Suguru Hirahara
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
@@ -58,13 +58,20 @@ After adjusting the hostname, make sure to adjust your DNS records to point the 
 
 ### Enable Playwright webdriver for advanced options (optional)
 
-Some advanced options like using Javascript or the Visual Selector tool require an additional Playwright webdriver.
+You can optionally have the instance connect to [Browserless](https://github.com/browserless/browserless) for advanced options like using Javascript or the Visual Selector tool.
 
-You can enable it by adding the following configuration to your `vars.yml` file:
+To enable the integration, add the following configuration to your `vars.yml` file:
 
 ```yaml
-changedetection_playwright_driver_enabled: true
+changedetection_changedetection_environment_variables_playwright_driver_url: YOUR_BROWSERLESS_INSTANCE_ENDPOINT_HERE
 ```
+
+Make sure to replace `YOUR_BROWSERLESS_INSTANCE_ENDPOINT_HERE` with your own value.
+
+If you are looking for an Ansible role for Browserless, you can check out [ansible-role-browserless](https://github.com/mother-of-all-self-hosting/ansible-role-browserless) maintained by the [Mother-of-All-Self-Hosting (MASH)](https://github.com/mother-of-all-self-hosting) team.
+
+>[!NOTE]
+> The bundled Browserless installation that this role used to provide has been removed.
 
 ### Extending the configuration
 

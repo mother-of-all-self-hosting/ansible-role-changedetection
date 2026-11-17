@@ -1,48 +1,41 @@
 # SPDX-FileCopyrightText: 2023 Niels Bouma
+# SPDX-FileCopyrightText: 2024 Bergruebe
+# SPDX-FileCopyrightText: 2024 Julian-Samuel Gebühr
+# SPDX-FileCopyrightText: 2025, 2026 Suguru Hirahara
 #
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # SPDX-License-Identifier: Apache-2.0
 
 ---
-- name: Check existence of Changedetection.io systemd service
-  ansible.builtin.stat:
-    path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}.service"
-  register: changedetection_service_stat
+- name: Ensure Changedetection.io systemd services are stopped and removed
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/remove_service.yml"
+  with_items:
+    - service: "{{ changedetection_identifier }}.service"
+      path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}.service"
+    # Legacy bundled services, removed from this role in favor of external instances
+    - service: "{{ changedetection_identifier }}-playwright-driver.service"
+      path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}-playwright-driver.service"
 
-- name: Uninstall Changedetection.io systemd services and files
-  when: changedetection_service_stat.stat.exists | bool
+- name: Ensure Changedetection.io container network does not exist
+  when: changedetection_container_network_deletion_enabled
   block:
-    - name: Ensure Changedetection.io systemd service is stopped
-      ansible.builtin.service:
-        name: "{{ changedetection_identifier }}"
-        state: stopped
-        enabled: false
-        daemon_reload: true
-
-    - name: Ensure Changedetection.io systemd service does not exist
-      ansible.builtin.file:
-        path: "{{ devture_systemd_docker_base_systemd_path }}/{{ changedetection_identifier }}.service"
+    - name: Ensure Changedetection.io container network does not exist via community.docker.docker_network
+      when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
+      community.docker.docker_network:
+        name: "{{ changedetection_container_network }}"
         state: absent
+      register: changedetection_network_deletion_result
 
-    - name: Ensure Changedetection.io container network does not exist
-      when: changedetection_container_network_deletion_enabled
-      block:
-        - name: Ensure Changedetection.io container network does not exist via community.docker.docker_network
-          when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
-          community.docker.docker_network:
-            name: "{{ changedetection_container_network }}"
-            state: absent
-          register: changedetection_network_deletion_result
+    - name: Ensure Changedetection.io container network does not exist via ansible.builtin.command
+      when: devture_systemd_docker_base_container_network_creation_method == 'command'
+      ansible.builtin.command:
+        cmd: >-
+          {{ devture_systemd_docker_base_host_command_docker }} network rm
+          {{ changedetection_container_network }}
+      register: changedetection_network_deletion_result
+      changed_when: changedetection_container_network in changedetection_network_deletion_result.stdout
 
-        - name: Ensure Changedetection.io container network does not exist via ansible.builtin.command
-          when: devture_systemd_docker_base_container_network_creation_method == 'command'
-          ansible.builtin.command:
-            cmd: >-
-              {{ devture_systemd_docker_base_host_command_docker }} network rm
-              {{ changedetection_container_network }}
-          register: changedetection_network_deletion_result
-          changed_when: changedetection_container_network in changedetection_network_deletion_result.stdout
-
-    - name: Ensure Changedetection.io path does not exist
-      ansible.builtin.file:
-        path: "{{ changedetection_base_path }}"
-        state: absent
+- name: Ensure Changedetection.io path does not exist
+  ansible.builtin.file:
+    path: "{{ changedetection_base_path }}"
+    state: absent

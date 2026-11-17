@@ -16,7 +16,16 @@
     - { "old": "changedetection_container_http_bind_port", "new": "changedetection_container_http_host_bind_port" }
     - { "old": "changedetection_http_header_content_permission_policy", "new": "changedetection_http_header_permissions_policy" }
     - { "old": "changedetection_container_image_force_pull", "new": "<removed> (the new community.docker.docker_image_pull module handles this natively)" }
-    - { "old": "changedetection_playwright_driver_container_image_force_pull", "new": "<removed> (the new community.docker.docker_image_pull module handles this natively)" }
+    - { "old": "changedetection_playwright_driver_url", "new": "changedetection_changedetection_environment_variables_playwright_driver_url" }
+
+- name: (Deprecation) Catch and report Changedetection.io Playwright driver variables
+  ansible.builtin.fail:
+    msg: |-
+      The bundled Browserless was removed. Please remove all `changedetection_playwright_driver_*` variables from your configuration file (vars.yml),
+      and point `changedetection_changedetection_environment_variables_playwright_driver_url` at an external instance, e.g. one installed by the MASH Browserless role.
+
+      The following variables in your configuration need to be removed: {{ lookup('ansible.builtin.varnames', '^changedetection_playwright_driver_.+', wantlist=True) | join(', ') }}
+  when: "lookup('ansible.builtin.varnames', '^changedetection_playwright_driver_.+', wantlist=True) | length > 0"
 
 - name: Fail if required Changedetection.io settings not defined
   ansible.builtin.fail:

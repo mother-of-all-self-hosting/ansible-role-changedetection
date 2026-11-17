@@ -16,15 +16,6 @@
     - name: Install Changedetection.io
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
 
-- name: Perform Changedetection.io playwright-driver uninstallation tasks
-  when: (not changedetection_playwright_driver_enabled | bool) or (not changedetection_enabled | bool)
-  tags:
-    - setup-all
-    - setup-changedetection
-  block:
-    - name: Uninstall Changedetection.io playwright-driver
-      ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall_playwright_driver.yml"
-
 - name: Perform Changedetection.io uninstallation tasks
   when: not changedetection_enabled | bool
   tags:
