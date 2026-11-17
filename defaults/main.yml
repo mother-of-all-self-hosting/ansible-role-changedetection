@@ -344,14 +344,6 @@ changedetection_playwright_driver_container_cleanup_command: |
 
 changedetection_playwright_driver_url: "{{ 'ws://' + changedetection_playwright_driver_identifier + ':3000/?stealth=1&--disable-web-security=true' if changedetection_playwright_driver_enabled else '' }}"
 
-changedetection_playwright_driver_connection_timeout: 300000
-changedetection_playwright_driver_concurrent_sessions: 10
-changedetection_playwright_driver_refresh_time: 600000
-changedetection_playwright_driver_block_ads: true
-changedetection_playwright_driver_stealth: true
-# Ignore HTTPS errors, like for self-signed certs
-changedetection_playwright_driver_ignore_https_errors: false
-
 # Specify the timezone
 changedetection_playwright_driver_environment_variables_tz: UTC
 
