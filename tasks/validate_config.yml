@@ -35,9 +35,6 @@
   with_items:
     - changedetection_uid
     - changedetection_gid
-    - changedetection_hostname
-    - changedetection_path_prefix
-    - changedetection_container_network
 
 - name: Run if Traefik is enabled
   when: changedetection_container_labels_traefik_enabled | bool
