@@ -39,7 +39,7 @@
   failed_when: false
 
 - name: Ensure Changedetection.io container network does not exist
-  when: changedetection_container_network_deletion_enabled
+  when: changedetection_container_network_deletion_enabled and changedetection_container_network != 'host'
   block:
     - name: Ensure Changedetection.io container network does not exist via community.docker.docker_network
       when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
