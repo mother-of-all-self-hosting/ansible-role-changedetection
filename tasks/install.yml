@@ -116,6 +116,9 @@
     mode: "0644"
   register: changedetection_systemd_service_result
 
+- name: Determine whether Changedetection.io container is stale
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/util/determine_container_staleness.yml"
+
 - name: Determine whether Changedetection.io needs a restart
   ansible.builtin.set_fact:
     changedetection_restart_necessary: >-
@@ -125,4 +128,5 @@
         or changedetection_container_image_pull_result_ansible_module.changed | default(false)
         or changedetection_container_image_pull_result_command.changed | default(false)
         or changedetection_container_image_build_result.changed | default(false)
+        or changedetection_container_stale | bool
       }}
